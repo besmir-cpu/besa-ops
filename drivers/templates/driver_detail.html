@@ -4,72 +4,36 @@
     <title>Driver Profile</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial;
             background: #f5f6fa;
             padding: 20px;
-            margin: 0;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             margin-bottom: 20px;
         }
 
-        .header h1 {
-            margin: 0 0 8px 0;
-        }
-
-        .subtext {
-            color: #666;
-            margin: 0;
-        }
-
         .status {
-            padding: 8px 14px;
-            border-radius: 8px;
+            padding: 6px 12px;
+            border-radius: 6px;
             font-size: 14px;
-            font-weight: bold;
-            text-transform: capitalize;
-        }
-
-        .status.invited {
-            background: #ffeaa7;
-            color: #7a5d00;
-        }
-
-        .status.submitted {
-            background: #81ecec;
-            color: #0b5f5f;
-        }
-
-        .status.active {
-            background: #55efc4;
-            color: #0b6b4b;
-        }
-
-        .status.approved {
-            background: #74b9ff;
-            color: #0b4f8a;
-        }
-
-        .status.default {
             background: #dfe6e9;
-            color: #444;
         }
 
         .card {
             background: white;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
 
         .section-title {
-            margin: 0 0 16px 0;
-            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 15px;
         }
 
         .grid {
@@ -81,12 +45,6 @@
 
         .label {
             font-weight: bold;
-            color: #333;
-        }
-
-        .value-empty {
-            color: #999;
-            font-style: italic;
         }
 
         .actions {
@@ -97,17 +55,16 @@
             display: inline-block;
             padding: 10px 16px;
             margin-right: 10px;
-            margin-bottom: 10px;
             background: #2f80ed;
             color: white;
             border-radius: 6px;
             text-decoration: none;
+            cursor: pointer;
         }
 
         .btn.green { background: #27ae60; }
         .btn.orange { background: #f39c12; }
         .btn.red { background: #e74c3c; }
-        .btn.grey { background: #636e72; }
 
         .btn:hover {
             opacity: 0.9;
@@ -115,48 +72,8 @@
 
         input.copy {
             width: 100%;
-            padding: 10px;
+            padding: 8px;
             margin-top: 10px;
-            box-sizing: border-box;
-        }
-
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
-
-        .summary-box {
-            background: #f8f9fb;
-            border: 1px solid #e8ebf0;
-            border-radius: 8px;
-            padding: 16px;
-        }
-
-        .summary-box h3 {
-            margin: 0 0 8px 0;
-            font-size: 16px;
-        }
-
-        .ok {
-            color: #1f8b4c;
-            font-weight: bold;
-        }
-
-        .pending {
-            color: #b9770e;
-            font-weight: bold;
-        }
-
-        .missing {
-            color: #c0392b;
-            font-weight: bold;
-        }
-
-        .two-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
         }
     </style>
 </head>
@@ -166,144 +83,56 @@
 <div class="header">
     <div>
         <h1>{{ driver.first_name }} {{ driver.last_name }}</h1>
-        <p class="subtext">Driver ID: {{ driver.id }}</p>
+        <p>Driver ID: {{ driver.id }}</p>
     </div>
-
-    <div class="status {% if driver.status == 'invited' %}invited{% elif driver.status == 'submitted' %}submitted{% elif driver.status == 'active' %}active{% elif driver.status == 'approved' %}approved{% else %}default{% endif %}">
-        {{ driver.status }}
-    </div>
+    <div class="status">{{ driver.status }}</div>
 </div>
 
 <div class="card">
-    <h2 class="section-title">Compliance Summary</h2>
-
-    <div class="summary-grid">
-        <div class="summary-box">
-            <h3>Onboarding</h3>
-            {% if driver.status == 'submitted' or driver.status == 'approved' or driver.status == 'active' %}
-                <div class="ok">Submitted</div>
-            {% elif driver.status == 'invited' %}
-                <div class="pending">Invite Sent</div>
-            {% else %}
-                <div class="missing">Not Started</div>
-            {% endif %}
-        </div>
-
-        <div class="summary-box">
-            <h3>Driver Status</h3>
-            {% if driver.status == 'active' %}
-                <div class="ok">Active</div>
-            {% elif driver.status == 'approved' %}
-                <div class="pending">Approved</div>
-            {% else %}
-                <div class="pending">{{ driver.status|title }}</div>
-            {% endif %}
-        </div>
-
-        <div class="summary-box">
-            <h3>Documents</h3>
-            <div class="pending">Pending Setup</div>
-        </div>
-    </div>
-</div>
-
-<div class="two-col">
-    <div class="card">
-        <h2 class="section-title">Personal Details</h2>
-        <div class="grid">
-            <div class="label">First Name</div>
-            <div>{{ driver.first_name }}</div>
-
-            <div class="label">Middle Name</div>
-            <div>
-                {% if driver.middle_name %}
-                    {{ driver.middle_name }}
-                {% else %}
-                    <span class="value-empty">Not provided</span>
-                {% endif %}
-            </div>
-
-            <div class="label">Last Name</div>
-            <div>{{ driver.last_name }}</div>
-
-            <div class="label">Date of Birth</div>
-            <div>
-                {% if driver.date_of_birth %}
-                    {{ driver.date_of_birth }}
-                {% else %}
-                    <span class="value-empty">Not provided</span>
-                {% endif %}
-            </div>
-
-            <div class="label">Contact Number</div>
-            <div>{{ driver.phone }}</div>
-
-            <div class="label">Email</div>
-            <div>
-                {% if driver.email %}
-                    {{ driver.email }}
-                {% else %}
-                    <span class="value-empty">Not provided</span>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2 class="section-title">Financial / Legal Details</h2>
-        <div class="grid">
-            <div class="label">NI Number</div>
-            <div>
-                {% if driver.ni_number %}
-                    {{ driver.ni_number }}
-                {% else %}
-                    <span class="value-empty">Not provided</span>
-                {% endif %}
-            </div>
-
-            <div class="label">UTR Number</div>
-            <div>
-                {% if driver.utr_number %}
-                    {{ driver.utr_number }}
-                {% else %}
-                    <span class="value-empty">Not provided</span>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="card">
-    <h2 class="section-title">Documents</h2>
+    <h2 class="section-title">Personal Details</h2>
     <div class="grid">
-        <div class="label">Driving Licence</div>
-        <div><span class="value-empty">Not uploaded yet</span></div>
+        <div class="label">First Name</div>
+        <div>{{ driver.first_name }}</div>
 
-        <div class="label">Right to Work</div>
-        <div><span class="value-empty">Not uploaded yet</span></div>
+        <div class="label">Middle Name</div>
+        <div>{{ driver.middle_name|default:"-" }}</div>
 
-        <div class="label">Background Check</div>
-        <div><span class="value-empty">Management upload pending</span></div>
+        <div class="label">Last Name</div>
+        <div>{{ driver.last_name }}</div>
+
+        <div class="label">Date of Birth</div>
+        <div>{{ driver.date_of_birth|default:"-" }}</div>
+
+        <div class="label">Contact Number</div>
+        <div>{{ driver.phone }}</div>
+
+        <div class="label">Email</div>
+        <div>{{ driver.email|default:"-" }}</div>
+    </div>
+</div>
+
+<div class="card">
+    <h2 class="section-title">Financial / Legal Details</h2>
+    <div class="grid">
+        <div class="label">NI Number</div>
+        <div>{{ driver.ni_number|default:"-" }}</div>
+
+        <div class="label">UTR Number</div>
+        <div>{{ driver.utr_number|default:"-" }}</div>
     </div>
 </div>
 
 <div class="card">
     <h2 class="section-title">Actions</h2>
 
+    <!-- Invite link -->
     <p><strong>Onboarding Link:</strong></p>
     <input class="copy" value="http://127.0.0.1:8000/onboard/{{ driver.invite_token }}/" readonly>
 
     <div class="actions">
-        {% if driver.status != 'active' %}
-            <a class="btn orange" href="/invite-driver/">Resend Invite</a>
-            <a class="btn green" href="/drivers/{{ driver.id }}/activate/">Mark as Active</a>
-        {% endif %}
-
-        {% if driver.status == 'active' %}
-            <a class="btn grey" href="/drivers/">Active Driver</a>
-        {% endif %}
-
-        <a class="btn red" href="/drivers/{{ driver.id }}/reject/">Reject</a>
+        <a class="btn orange" href="/invite-driver/">Resend Invite</a>
+        <a class="btn green" href="#">Mark as Active</a>
+        <a class="btn red" href="#">Reject</a>
     </div>
 </div>
 
