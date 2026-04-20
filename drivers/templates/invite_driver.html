@@ -1,0 +1,18 @@
+<h2>Invite Driver</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <input name="first_name" placeholder="First Name"><br><br>
+    <input name="last_name" placeholder="Last Name"><br><br>
+    <input name="phone" placeholder="Phone Number"><br><br>
+
+    <button type="submit">Generate Invite Link</button>
+</form>
+
+{% if invite_link %}
+    <hr>
+    <h3>Invite Link</h3>
+    <p>Copy this link and send it on WhatsApp:</p>
+    <p><a href="{{ invite_link }}">{{ invite_link }}</a></p>
+{% endif %}

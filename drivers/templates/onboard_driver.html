@@ -1,0 +1,23 @@
+<h2>Driver Onboarding</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <h3>Personal Details</h3>
+
+    <input name="first_name" placeholder="First Name" value="{{ driver.first_name }}"><br><br>
+    <input name="middle_name" placeholder="Middle Name"><br><br>
+    <input name="last_name" placeholder="Last Name" value="{{ driver.last_name }}"><br><br>
+
+    <input type="date" name="date_of_birth"><br><br>
+
+    <input name="phone" placeholder="Phone" value="{{ driver.phone }}"><br><br>
+    <input name="email" placeholder="Email"><br><br>
+
+    <h3>Legal Details</h3>
+
+    <input name="ni_number" placeholder="NI Number"><br><br>
+    <input name="utr_number" placeholder="UTR Number"><br><br>
+
+    <button type="submit">Submit Application</button>
+</form>
